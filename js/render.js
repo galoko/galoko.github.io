@@ -115,16 +115,13 @@ Render.prototype.loaded = function () {
 
 Render.prototype.setupScreenSize = function () {
 	
-	var width = document.documentElement.clientWidth;
-	var height = document.documentElement.clientHeight;
+	var width = this.canvas.clientWidth;
+	var height = this.canvas.clientHeight;
 	
 	var dpr = window.devicePixelRatio;
 	
 	this.screenWidth = width * dpr;
 	this.screenHeight = height * dpr;
-	
-	this.canvas.style.width = width + "px";
-	this.canvas.style.height = height + "px";
 	
 	this.canvas.width = this.screenWidth;
 	this.canvas.height = this.screenHeight;
