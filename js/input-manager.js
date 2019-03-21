@@ -126,41 +126,31 @@ InputManager.prototype.cancelPointerLockSchedule = function () {
 InputManager.prototype.process = function (dt) {
 	var movingVector = glMatrix.vec3.fromValues(0, 0, 0);
 	
+	var up = glMatrix.vec3.fromValues(0, 0, 1);
 	var cameraRotation = render.getCameraRotation();
 	
+	var direction = render.calcDirectionFromAngles(cameraRotation[0], cameraRotation[1]);
+	
+	var sideDirection = glMatrix.vec3.create();
+	glMatrix.vec3.cross(sideDirection, direction, up);
+	
+	var forwardDirection = direction;
+	
 	// forward
-	if (this.keyMap[87] || this.keyMap[38]) {
-		var direction = render.calcDirectionFromAngles(
-			cameraRotation[0], cameraRotation[1]);
-			
-		glMatrix.vec3.add(movingVector, movingVector, direction);
-	}
+	if (this.keyMap[87] || this.keyMap[38]) 		
+		glMatrix.vec3.add(movingVector, movingVector, forwardDirection);
 	
 	// back
-	if (this.keyMap[83] || this.keyMap[40]) {
-		var direction = render.calcDirectionFromAngles(
-			cameraRotation[0] + Math.PI, cameraRotation[1]);
-			
-		glMatrix.vec3.add(movingVector, movingVector, direction);
-	}
+	if (this.keyMap[83] || this.keyMap[40])		
+		glMatrix.vec3.subtract(movingVector, movingVector, forwardDirection);
 	
-	/*
 	// right
-	if (this.keyMap[68] || this.keyMap[39]) {
-		var direction = render.calcDirectionFromAngles(
-			cameraRotation[0], cameraRotation[1] + Math.PI / 2);
-			
-		glMatrix.vec3.add(movingVector, movingVector, direction);
-	}
+	if (this.keyMap[68] || this.keyMap[39])
+		glMatrix.vec3.add(movingVector, movingVector, sideDirection);
 	
 	// left
-	if (this.keyMap[65] || this.keyMap[37]) {
-		var direction = render.calcDirectionFromAngles(
-			cameraRotation[0], cameraRotation[1] - Math.PI / 2);
-			
-		glMatrix.vec3.add(movingVector, movingVector, direction);
-	}
-	*/
+	if (this.keyMap[65] || this.keyMap[37])
+		glMatrix.vec3.subtract(movingVector, movingVector, sideDirection);
 	
 	glMatrix.vec3.normalize(movingVector, movingVector);
 	
