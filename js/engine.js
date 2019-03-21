@@ -1,6 +1,7 @@
 var engine = new Engine();
 var render = new Render();
 var resourceLoader = new ResourceLoader();
+var inputManager = new InputManager();
 
 function Engine() {
 }
@@ -8,6 +9,7 @@ function Engine() {
 Engine.prototype.initialize = function () {	
 	render.initialize();
 	resourceLoader.initialize();
+	inputManager.initialize();
 	
 	resourceLoader.loadAllResources(this.loaded.bind(this));
 };
