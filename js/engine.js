@@ -121,6 +121,8 @@ Engine.prototype.scheduleNextTick = function () {
 Engine.prototype.tick = function () {
 	this.scheduleNextTick();
 	
+	// TODO use actual dt
+	inputManager.process(1 / 60);
 	render.draw();
 };
 

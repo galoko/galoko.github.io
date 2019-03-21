@@ -143,6 +143,33 @@ Render.prototype.setCameraPosition = function (x, y, z) {
 	this.updateViewMatrix();
 };
 
+Render.prototype.getCameraPosition = function () {
+	return this.cameraPosition;
+};
+
+Render.prototype.rotateCamera = function (x, z) {
+	
+    this.cameraRotation[0] += x;
+    this.cameraRotation[1] += z;
+
+    this.updateViewMatrix();
+};
+
+Render.prototype.getCameraRotation = function () {
+   return this.cameraRotation;
+};
+
+Render.prototype.calcDirectionFromAngles = function (x, z) {
+	
+    var sinX = Math.sin(x);
+	var cosX = Math.cos(x);
+	
+    var sinZ = Math.sin(z);
+	var cosZ = Math.cos(z);
+	
+	return glMatrix.vec3.fromValues(sinX * sinZ, sinX * cosZ, cosX);
+};
+
 Render.prototype.lookAtPoint = function (x, y, z) {
 	
 	var point = glMatrix.vec3.fromValues(x, y, z);
@@ -175,18 +202,14 @@ Render.prototype.updateProjectionMatrix = function () {
 Render.prototype.updateViewMatrix = function () {
 
     // limit angles
-	this.cameraRotation.z %= Math.PI * 2;
-    this.cameraRotation.x = Math.min(Math.max(0.1, this.cameraRotation.x), 3.13);
+    this.cameraRotation[0] = Math.min(Math.max(0.1, this.cameraRotation[0]), 3.13);
+	this.cameraRotation[1] %= Math.PI * 2;
 
-    var sinX = Math.sin(this.cameraRotation[0]);
-	var cosX = Math.cos(this.cameraRotation[0]);
-    var sinZ = Math.sin(this.cameraRotation[1]);
-	var cosZ = Math.cos(this.cameraRotation[1]);
-	
-	var lookPosition = glMatrix.vec3.fromValues(
-		this.cameraPosition[0] + sinX * sinZ, 
-		this.cameraPosition[1] + sinX * cosZ, 
-		this.cameraPosition[2] + cosX);
+	var cameraDirection = this.calcDirectionFromAngles(
+		this.cameraRotation[0], this.cameraRotation[1]);
+		
+	var lookPosition = glMatrix.vec3.create();
+	glMatrix.vec3.add(lookPosition, this.cameraPosition, cameraDirection);
 	
 	var up = glMatrix.vec3.fromValues(0, 0, 1);
 	
