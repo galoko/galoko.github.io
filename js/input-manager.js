@@ -130,18 +130,20 @@ InputManager.prototype.process = function (dt) {
 	var cameraRotation = render.getCameraRotation();
 	
 	var direction = render.calcDirectionFromAngles(cameraRotation[0], cameraRotation[1]);
+	glMatrix.vec3.normalize(direction, direction);
 	
 	var sideDirection = glMatrix.vec3.create();
 	glMatrix.vec3.cross(sideDirection, direction, up);
+	glMatrix.vec3.normalize(sideDirection, sideDirection);
 	
 	var forwardDirection = direction;
 	
 	// forward
-	if (this.keyMap[87] || this.keyMap[38]) 		
+	if (this.keyMap[87] || this.keyMap[38])
 		glMatrix.vec3.add(movingVector, movingVector, forwardDirection);
 	
 	// back
-	if (this.keyMap[83] || this.keyMap[40])		
+	if (this.keyMap[83] || this.keyMap[40])
 		glMatrix.vec3.subtract(movingVector, movingVector, forwardDirection);
 	
 	// right

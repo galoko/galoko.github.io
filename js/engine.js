@@ -118,7 +118,7 @@ Engine.prototype.scheduleNextTick = function () {
 	window.requestAnimationFrame(this.tickCallback);
 };
 
-Engine.prototype.tick = function () {
+Engine.prototype.tick = function () {	
 	this.scheduleNextTick();
 	
 	// TODO use actual dt
