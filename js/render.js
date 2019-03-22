@@ -118,7 +118,7 @@ Render.prototype.setupScreenSize = function () {
 	var width = document.body.clientWidth;
 	var height = document.body.clientHeight;
 	
-	var dpr = window.devicePixelRatio;
+	var dpr = window.devicePixelRatio * Math.min(1, 640 / width);
 	
 	this.screenWidth = width * dpr;
 	this.screenHeight = height * dpr;

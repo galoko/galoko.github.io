@@ -115,15 +115,29 @@ Engine.prototype.debugRender = function () {
 };
 
 Engine.prototype.scheduleNextTick = function () {
+	
+	this.fpsCounter++;
+	
+	var now = new Date().getTime();
+	if (now - 1000 >= this.startTime) {
+		delete this.startTime;
+		document.title = this.fpsCounter + " FPS";
+	}
+	
+	if (this.startTime === undefined) {
+		this.startTime = now;
+		this.fpsCounter = 0;
+	}
+	
 	window.requestAnimationFrame(this.tickCallback);
 };
 
 Engine.prototype.tick = function () {	
-	this.scheduleNextTick();
-	
 	// TODO use actual dt
 	inputManager.process(1 / 60);
 	render.draw();
+	
+	this.scheduleNextTick();
 };
 
 engine.initialize();
