@@ -114,27 +114,27 @@ Engine.prototype.debugRender = function () {
 	render.addSurface(surface);
 };
 
-Engine.prototype.scheduleNextTick = function () {
-	
-	this.fpsCounter++;
-	
-	var now = new Date().getTime();
-	if (now - 1000 >= this.startTime) {
-		delete this.startTime;
-		document.title = this.fpsCounter + " FPS";
-	}
-	
-	if (this.startTime === undefined) {
-		this.startTime = now;
-		this.fpsCounter = 0;
-	}
-	
+Engine.prototype.scheduleNextTick = function () {	
 	window.requestAnimationFrame(this.tickCallback);
 };
+	
+Engine.prototype.getDt = function () {
+	var now = new Date().getTime();
+	if (this.lastTick === undefined)
+		this.lastTick = now;
+	
+	var dt = Math.min((now - this.lastTick) / 1000, 1 / 15);
+	
+	this.lastTick = now;
+	
+	return dt;
+};
 
-Engine.prototype.tick = function () {	
-	// TODO use actual dt
-	inputManager.process(1 / 60);
+Engine.prototype.tick = function () {
+	
+	var dt = this.getDt();
+
+	inputManager.process(dt);
 	render.draw();
 	
 	this.scheduleNextTick();

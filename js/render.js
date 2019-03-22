@@ -10,6 +10,7 @@ Render.prototype.initialize = function () {
 Render.prototype.setupGL = function() {
 
     var canvas = document.getElementById('scene');
+	var fps = document.getElementById('fps');
 	
 	var attributes = 
 	{ 
@@ -31,6 +32,8 @@ Render.prototype.setupGL = function() {
 	if ('create3DContextWithWrapperThatThrowsOnGLError' in window) {
 		gl = create3DContextWithWrapperThatThrowsOnGLError(gl);
 	}
+	
+	this.fps = fps;
 	
 	this.canvas = canvas;
 	this.gl = gl;
@@ -121,6 +124,22 @@ Render.prototype.loaded = function () {
 	this.mapPixelAllocator = new Allocator(512 * 512);
 	
 	// this.debugWritePixels();
+};
+
+Render.prototype.calcFPS = function () {
+	
+	this.fpsCounter++;
+	
+	var now = new Date().getTime();
+	if (now - 1000 >= this.startTime) {
+		delete this.startTime;
+		fps.innerText = this.fpsCounter;
+	}
+	
+	if (this.startTime === undefined) {
+		this.startTime = now;
+		this.fpsCounter = 0;
+	}
 };
 
 Render.prototype.setupScreenSize = function () {
@@ -455,6 +474,8 @@ Render.prototype.draw = function () {
 	this.projectionMatrixNeedUpdate = false;
 	this.viewMatrixNeedUpdate = false;
 	this.vpMatrixNeedUpdate = false;
+	
+	this.calcFPS();
 };
 
 Render.prototype.compileShader = function (name, uniforms, attributes) {
