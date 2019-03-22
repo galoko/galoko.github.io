@@ -11,9 +11,19 @@ Render.prototype.setupGL = function() {
 
     var canvas = document.getElementById('scene');
 	
-    var gl = canvas.getContext('webgl');
+	var attributes = 
+	{ 
+	  alpha: true, 
+	  antialias: false,
+	  failIfMajorPerformanceCaveat: true, 
+	  powerPreference: "high-performance",
+	  preserveDrawingBuffer: false, 
+	  stencil: false
+	};
+	
+    var gl = canvas.getContext('webgl', attributes);
     if (!gl)
-        gl = canvas.getContext('experimental-webgl');
+        gl = canvas.getContext('experimental-webgl', attributes);
 
     if (!gl)
         return false;
@@ -27,7 +37,7 @@ Render.prototype.setupGL = function() {
 	
 	// settings
 			
-    gl.disable(gl.CULL_FACE);
+    gl.enable(gl.CULL_FACE);
     gl.frontFace(gl.CW);
     gl.cullFace(gl.BACK);
 	
@@ -120,18 +130,18 @@ Render.prototype.setupScreenSize = function () {
 	
 	var dpr = window.devicePixelRatio;
 	
-	this.screenWidth = width * dpr;
-	this.screenHeight = height * dpr;
+	this.screenWidth = width;
+	this.screenHeight = height;
 	
-	this.canvas.width = this.screenWidth;
-	this.canvas.height = this.screenHeight;
+	this.canvas.width = this.screenWidth * dpr;
+	this.canvas.height = this.screenHeight * dpr;
 	
-	this.canvas.style.width = width + "px";
-	this.canvas.style.height = height + "px";
+	this.canvas.style.width = this.screenWidth + "px";
+	this.canvas.style.height = this.screenHeight + "px";
 	
 	this.updateProjectionMatrix();
 	
-	this.gl.viewport(0.0, 0.0, this.screenWidth, this.screenHeight);
+	this.gl.viewport(0.0, 0.0, this.canvas.width, this.canvas.height);
 };
 
 Render.prototype.setCameraPosition = function (x, y, z) {
@@ -188,12 +198,12 @@ Render.prototype.lookAtPoint = function (x, y, z) {
 
 Render.prototype.updateProjectionMatrix = function () {
 	
-	var aspectRatio = this.screenWidth / this.screenHeight;
+	this.aspectRatio = this.screenWidth / this.screenHeight;
 	
 	var FOV = 60;
 	
     glMatrix.mat4.perspective(this.projection, glMatrix.glMatrix.toRadian(FOV), 
-		aspectRatio, 0.1, 1000.0);
+		this.aspectRatio, 0.1, 1000.0);
 	
 	this.projectionMatrixNeedUpdate = true;
 	this.vpMatrixNeedUpdate = true;

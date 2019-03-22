@@ -53,15 +53,15 @@ void main()
 	float tx = texCoord.x;
 	float ty = texCoord.y;
 	
-	float ix = float(int(tx)); // integer part of coord
-	float iy = float(int(ty)); // integer part of coord
+	float ix = floor(tx); // integer part of coord
+	float iy = floor(ty); // integer part of coord
 	
 	float fx = tx - ix; // fraction part of coord
 	float fy = ty - iy; // fraction part of coord
 	
 	float pixel = start + iy * stride + ix * (1.0 / 512.0); // linear map coordinate
 	
-	float ipixel = float(int(0.5 + pixel)); // integer part of linear coordinate, 1 means full row
+	float ipixel = floor(pixel); // integer part of linear coordinate, 1 means full row
 	float fpixel = pixel - ipixel;
 	
 	vec2 pixelCoord;
