@@ -118,7 +118,7 @@ Render.prototype.setupScreenSize = function () {
 	var width = document.body.clientWidth;
 	var height = document.body.clientHeight;
 	
-	var dpr = window.devicePixelRatio * Math.min(1, 640 / width);
+	var dpr = window.devicePixelRatio;
 	
 	this.screenWidth = width * dpr;
 	this.screenHeight = height * dpr;
@@ -368,10 +368,10 @@ Render.prototype.writeVertices = function (surface) {
 		var x = surface.vertices[srcIndex + 0] - rect.left;
 		var y = surface.vertices[srcIndex + 1] - rect.top;
 		
-		var e = 1.0 / 512.0;
+		var e = 0.5 / 512.0;
 				
-		shaderVertices[dstIndex + 0] = Math.max(e, x - e); // x in blocks
-		shaderVertices[dstIndex + 1] = Math.max(e, y - e); // y in blocks
+		shaderVertices[dstIndex + 0] = Math.max(0, x - e); // x in blocks
+		shaderVertices[dstIndex + 1] = Math.max(0, y - e); // y in blocks
 		shaderVertices[dstIndex + 2] = start; // start in 1/512
 		shaderVertices[dstIndex + 3] = stride; // stride in 1/512
 	}

@@ -57,6 +57,8 @@ Engine.prototype.debugRender = function () {
 
 	render.addSurface(surface);
 	
+	return;
+	
 	var surface = {
 		id: 1,
 		type: 4,
