@@ -51,6 +51,7 @@ InputManager.prototype.initialize = function () {
 		touchstart: this.touchStartEvent.bind(this),
 		touchmove: this.touchMoveEvent.bind(this),
 		touchend: this.touchEndEvent.bind(this),
+		scroll: this.scrollEvent.bind(this),
 	};
 	
 	// keys
@@ -82,6 +83,8 @@ InputManager.prototype.initialize = function () {
 	window.addEventListener("touchend", this.bind.touchend, { passive: false });
 	
 	window.addEventListener("contextmenu", this.bind.contextmenu, { passive: false });
+	
+	window.addEventListener("scroll", this.bind.scroll, { passive: true });
 	
 	if (this.api.pointerLock) {
 		document.addEventListener(pointerLockEventName, this.bind.pointerLock, 
@@ -429,4 +432,9 @@ InputManager.prototype.touchEndEvent = function (event) {
 			}
 		}
 	}
+};
+
+InputManager.prototype.scrollEvent = function (event) {
+	
+	document.body.scrollTop = 0;
 };

@@ -144,8 +144,9 @@ Render.prototype.calcFPS = function () {
 
 Render.prototype.setupScreenSize = function () {
 	
+	document.body.scrollTop = 0;
 	var width = document.body.clientWidth;
-	var height = document.body.clientHeight;
+	var height = window.innerHeight;
 	
 	var dpr = window.devicePixelRatio;
 	
