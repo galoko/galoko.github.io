@@ -143,10 +143,13 @@ Render.prototype.calcFPS = function () {
 };
 
 Render.prototype.setupScreenSize = function () {
-	
+		
 	document.body.scrollTop = 0;
 	var width = document.body.clientWidth;
-	var height = window.innerHeight;
+	var height = document.body.clientHeight - 80;
+	var isLandscape = width > height;
+	if (isLandscape)	
+		height = window.innerHeight;
 	
 	var dpr = window.devicePixelRatio;
 	
